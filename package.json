@@ -23,6 +23,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "electron-promise-ipc": "^1.2.2",
+    "element-theme-default": "^1.4.13",
+    "element-ui": "^2.8.2",
     "nedb": "^1.8.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

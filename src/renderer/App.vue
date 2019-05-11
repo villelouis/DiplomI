@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <link rel="stylesheet" href="../../node_modules/element-theme-default/lib/index.css">
         <div>{{caption}}</div>
         <router-view></router-view>
     </div>
@@ -12,7 +13,7 @@
         name: 'helper-11',
         data() {
             return {
-                caption: ""
+                caption: "",
             }
         },
         created() {

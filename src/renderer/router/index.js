@@ -4,15 +4,20 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
-    },
-    {
-      path: '*',
-      redirect: '/'
-    }
-  ]
+    routes: [
+        {
+            path: '/landing',
+            name: 'landing-page',
+            component: require('@/components/LandingPage').default
+        },
+        {
+            path: '/',
+            name: 'Table',
+            component: require('@/components/Table').default
+        },
+        {
+            path: '*',
+            redirect: '/'
+        }
+    ]
 })

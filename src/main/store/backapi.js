@@ -69,6 +69,10 @@ export default {
 
     asyncUpdateRecord: promiseIpc.on('asyncUpdateRecord', (arg) => {
         return db.asyncUpdateRecord(...arg)
+    }),
+
+    asyncGetCurrentMETATABLE: promiseIpc.on('asyncGetCurrentMETATABLE', (arg) => {
+        return db.asyncGetCurrentMETATABLE(...arg)
     })
 
 }

@@ -49,6 +49,8 @@ const ipc_getCurrentUser = ipcDecorator("getCurrentUser")
 const ipc_setCurrentUser = ipcDecorator("setCurrentUser")
 //setCurrentUser(newUser)
 
+const ipc_asyncGetCurrentMETATABLE = ipcDecorator("asyncGetCurrentMETATABLE")
+//asyncGetCurrentMETATABLE()
 
 export default {
         getFullTablePath: ipc_getFullTablePath,
@@ -63,7 +65,8 @@ export default {
         asyncRemoveRecord: ipc_asyncRemoveRecord,
         asyncUpdateRecord: ipc_asyncUpdateRecord,
         getCurrentUser: ipc_getCurrentUser,
-        setCurrentUse: ipc_setCurrentUser
+        setCurrentUse: ipc_setCurrentUser,
+        asyncGetCurrentMETATABLE: ipc_asyncGetCurrentMETATABLE
 }
 
 

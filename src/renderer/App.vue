@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-        <link rel="stylesheet" href="../../node_modules/element-theme-default/lib/index.css">
-        <div>{{caption}}</div>
-        <router-view></router-view>
+            <link rel="stylesheet" href="../../node_modules/element-theme-default/lib/index.css">
+            <div>{{caption}}</div>
+            <router-view></router-view>
     </div>
 </template>
 
@@ -18,6 +18,7 @@
         },
         created() {
             this.init();
+            this.wheredb();
         },
         methods: {
             init() {
@@ -31,6 +32,15 @@
                     })
                 } catch (e) {
                     console.log("Произошла ошибка на этапе запуска", e)
+                }
+            },
+            wheredb() {
+                try {
+                    this.$store.getFullTablePath([]).then((res)=> {
+                        console.log("Путь к базе данных", res);
+                    })
+                } catch (e) {
+                    console.log("Произошла ошибка при получении пути к базе данных", e)
                 }
             }
         }

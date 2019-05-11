@@ -4,5 +4,6 @@ module.exports = {
     path_to_db: path_to_db,
     meta_table_name:"meta-table.db",
     user:"Max",
-    defaultTableName:"StartTable"
+    defaultTableName:"StartTable",
+    defaultColumns:['Товар','Цена','Скидка']
 };

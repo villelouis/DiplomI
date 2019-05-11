@@ -72,18 +72,41 @@
             init() {
                 try {
                     let self = this;
+                    this.$store.asyncGetCurrentMETATABLE([]).then((res) => {
+                        console.log("Текущая МЕТА-таблица", res);
+                        self.caption = res;
+                    }).catch((e) => {
+                        console.log("Произошла ошибка", e)
+                    });
+
                     this.$store.getCurrentTable([]).then((res) => {
                         console.log("Текущая таблица", res);
                         self.caption = res;
                     }).catch((e) => {
                         console.log("Произошла ошибка", e)
-                    })
+                    });
+
+                    this.$store.getFullTablePath([]).then((res) => {
+                        console.log("Путь к базе данных", res);
+                        self.caption = res;
+                    }).catch((e) => {
+                        console.log("Произошла ошибка", e)
+                    });
+
                     this.$store.asyncGetAllRecords([]).then((res) => {
                         console.log("Получены данные таблицы", res);
                         self.tableData = res;
                     }).catch((e) => {
                         console.log("Произошла ошибка", e)
-                    })
+                    });
+
+                    this.$store.asyncGetAllTablesOfUser([]).then((res) => {
+                        console.log("Получены все таблицы", res);
+                        self.tableData = res;
+                    }).catch((e) => {
+                        console.log("Произошла ошибка", e)
+                    });
+
                 } catch (e) {
                     console.log("Произошла ошибка на этапе запуска", e)
                 }

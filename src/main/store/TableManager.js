@@ -13,10 +13,11 @@ import DB_settings from './db_settings';
 const electron = require('electron');
 const app = electron.app;
 const path_to_dbs = path.join(app.getPath('userData'), DB_settings.path_to_db);
-console.log("Путь до файлов Базы данных : ",path_to_dbs);
+console.log("Путь до файлов Базы данных : ", path_to_dbs);
 
 const defaultUser = DB_settings.user;
 const defaultTableName = DB_settings.defaultTableName;
+const defaultColumns = DB_settings.defaultColumns;
 
 const METATABLE_name = DB_settings.meta_table_name;
 
@@ -25,13 +26,18 @@ class TableManager {
     /*
     Методы для управления файлами таблиц
      */
-    constructor({tableName,user,caption} = {}) {
-        this.user = user === undefined ? defaultUser:user;
-        this.currentTable = tableName === undefined ? defaultTableName:tableName;
+    constructor({tableName, user, caption, columnsList} = {}) {
+        this.user = user === undefined ? defaultUser : user;
+        this.currentTable = tableName === undefined ? defaultTableName : tableName;
         this.caption = caption === undefined ? this.currentTable : caption;
         this.METATABLE = this.loadTable(METATABLE_name);
         if (!this.tableExists(this.currentTable)) {
-            this.asyncAddTableToMETATABLE(this.currentTable, {caption: caption, user: this.user}).then(
+            columnsList = columnsList === undefined ? defaultColumns : columnsList;
+            this.asyncAddTableToMETATABLE(this.currentTable, {
+                caption: caption,
+                user: this.user,
+                columnsList: columnsList
+            }).then(
                 () => {
                     resolve();
                 }
@@ -41,6 +47,7 @@ class TableManager {
     }
 
     getFullTablePath(tableName) {
+        tableName = tableName === undefined ? this.currentTable : tableName;
         return path.join(path_to_dbs, tableName);
     }
 
@@ -57,13 +64,13 @@ class TableManager {
         });
     }
 
-    asyncSetCurrentTable(tableName, {caption, user} = {}) {
+    asyncSetCurrentTable(tableName, {caption, user, columnsList} = {}) {
         let self = this;
         return new Promise(function (resolve) {
             self.currentTable = tableName;
             self.db = self.loadTable(tableName);
             if (!self.tableExists(tableName)) {
-                self.asyncAddTableToMETATABLE(tableName, {caption: caption, user: user}).then(
+                self.asyncAddTableToMETATABLE(tableName, {caption: caption, user: user, columnsList: columnsList}).then(
                     () => {
                         resolve();
                     }
@@ -111,7 +118,7 @@ class TableManager {
     /*
     Методы для работы с МЕТАТАБЛИЦЕЙ
     */
-    asyncAddTableToMETATABLE(tableName, {caption, user} = {}) {
+    asyncAddTableToMETATABLE(tableName, {caption, user, columnsList} = {}) {
         let self = this;
         return new Promise(function (resolve, reject) {
             user = user === undefined ? self.user : user;
@@ -122,7 +129,9 @@ class TableManager {
                 table: tableName,
                 caption: caption
             };
-            self.METATABLE.insert(doc, (err, doc) => {
+            let columns = {columns: columnsList};
+            let record = Object.assign(doc, columns);
+            self.METATABLE.insert(record, (err, doc) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -130,6 +139,19 @@ class TableManager {
                 }
             });
         });
+    }
+
+    asyncGetCurrentMETATABLE() {
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            self.METATABLE.findOne({_id:`${self.user}@${self.currentTable}`}, (err, doc) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(doc);
+                }
+            });
+        })
     }
 
     asyncRemoveTable({tableName, user} = {}) {
@@ -250,6 +272,7 @@ class TableManager {
     setCurrentUser(newUser) {
         this.user = newUser;
     }
+
     //=================Сделать асинхронными:=========================================================
     // $
     renameTable(newName, {tableName} = {}) {
@@ -269,7 +292,5 @@ class TableManager {
     }
 
 }
-
-
 
 export default TableManager

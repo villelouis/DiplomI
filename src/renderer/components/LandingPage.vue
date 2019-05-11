@@ -31,7 +31,7 @@
 
 <script>
   import SystemInformation from './LandingPage/SystemInformation'
-
+  import console from 'console'
   export default {
     name: 'landing-page',
     components: { SystemInformation },
@@ -51,13 +51,13 @@
         try {
           let self = this;
           this.$store.getCurrentUser([]).then((res) => {
-            console.log("Получен результат", res);
+            console.log("Получено имя пользователя", res);
             self.caption = res;
           }).catch((e) => {
-            console.log("Получена ошибка", e)
+            console.log("Произошла ошибка", e)
           })
         } catch (e) {
-          console.log("Получена ошибка на этапе запуска", e)
+          console.log("Произошла ошибка на этапе запуска", e)
         }
 
       }

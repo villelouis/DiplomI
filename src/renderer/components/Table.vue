@@ -1,30 +1,28 @@
 <template>
     <el-table
             :data="tableData"
-            height="250"
             style="width: 100%">
-        <el-table-column
-                prop="date"
-                label="Date"
-                width="180">
+        <el-table-column v-for="column in columns"
+                         :key="column.label"
+                         :prop="column.prop"
+                         :label="column.label">
         </el-table-column>
-        <el-table-column
-                prop="name"
-                label="Name"
-                width="180">
-        </el-table-column>
-        <el-table-column
-                prop="address"
-                label="Address">
+        <el-table-column fixed="right">
+            <template slot-scope="scope">
+                ... your delete button or whatever here...
+            </template>
         </el-table-column>
     </el-table>
 </template>
 
 <script>
+    import console from 'console'
+
     export default {
         name: "Table",
         data() {
             return {
+                /*
                 tableData: [
                     {
                         date: '2016-05-03',
@@ -54,7 +52,41 @@
                         date: '2016-05-07',
                         name: 'Tom',
                         address: 'No. 189, Grove St, Los Angeles'
-                    }]
+                    }],
+
+                 */
+                tableData: [],
+                columns: [
+                    {prop: "date", label: "Date", width: "180"},
+                    {prop: "name", label: "Name", width: "180"},
+                    {prop: "address", label: "Address"},
+                    {prop: "SSS", label: "SSS"},
+                ],
+                caption: ""
+            }
+        },
+        created() {
+            this.init();
+        },
+        methods: {
+            init() {
+                try {
+                    let self = this;
+                    this.$store.getCurrentTable([]).then((res) => {
+                        console.log("Текущая таблица", res);
+                        self.caption = res;
+                    }).catch((e) => {
+                        console.log("Произошла ошибка", e)
+                    })
+                    this.$store.asyncGetAllRecords([]).then((res) => {
+                        console.log("Получены данные таблицы", res);
+                        self.tableData = res;
+                    }).catch((e) => {
+                        console.log("Произошла ошибка", e)
+                    })
+                } catch (e) {
+                    console.log("Произошла ошибка на этапе запуска", e)
+                }
             }
         }
     }

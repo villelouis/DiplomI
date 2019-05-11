@@ -2,7 +2,8 @@ import Vue from 'vue'
 import axios from 'axios'
 
 import Element from 'element-ui'
-Vue.use(Element)
+import locale from 'element-ui/lib/locale/lang/ru-RU'
+Vue.use(Element,{ locale })
 
 import App from './App'
 import router from './router'

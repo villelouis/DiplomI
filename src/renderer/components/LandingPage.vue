@@ -4,7 +4,7 @@
     <main>
       <div class="left-side">
         <span class="title">
-          Welcome to your new project!
+          {{this.caption}}
         </span>
         <system-information></system-information>
       </div>
@@ -35,9 +35,31 @@
   export default {
     name: 'landing-page',
     components: { SystemInformation },
+    created() {
+      this.init();
+    },
+    data() {
+      return {
+        caption: ""
+      }
+    },
     methods: {
       open (link) {
         this.$electron.shell.openExternal(link)
+      },
+      init() {
+        try {
+          let self = this;
+          this.$store.getCurrentUser([]).then((res) => {
+            console.log("Получен результат", res);
+            self.caption = res;
+          }).catch((e) => {
+            console.log("Получена ошибка", e)
+          })
+        } catch (e) {
+          console.log("Получена ошибка на этапе запуска", e)
+        }
+
       }
     }
   }
